@@ -20,18 +20,23 @@ const slides = [
   },
 ];
 
+
 // Récupération des éléments HTML pour les flèches gauche et droite
 const arrowLeft = document.getElementById("arrowLeft");
 const arrowRight = document.getElementById("arrowRight");
 
 // Gestionnaire d'événement pour la flèche gauche
 arrowLeft.addEventListener("click", function () {
-  console.log("Clic sur le bouton gauche");
+  // Décrémente l'index actuel et appelle la fonction pour mettre à jour le carousel
+  currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+  updateCarousel();
 });
 
 // Gestionnaire d'événement pour la flèche droite
 arrowRight.addEventListener("click", function () {
-  console.log("Clic sur le bouton droit");
+  // Incrémente l'index actuel et appelle la fonction pour mettre à jour le carousel
+  currentIndex = (currentIndex + 1) % slides.length;
+  updateCarousel();
 });
 
 // Calcul du nombre total de diapositives
@@ -59,7 +64,9 @@ const dots = document.querySelectorAll(".dot");
 // Gestionnaire d'événement pour chaque point (dot)
 dots.forEach((dot, index) => {
   dot.addEventListener("click", () => {
-    console.log("Clique sur une diapo");
+    // Met à jour l'index actuel avec celui du point cliqué et appelle la fonction pour mettre à jour le carousel
+    currentIndex = index;
+    updateCarousel();
   });
 });
 
@@ -70,41 +77,23 @@ let currentIndex = 0;
 const imageElement = document.getElementById("img_banner");
 const tagLineElement = document.querySelector("#tagline");
 
-// Récupération de tous les points (dots)
-const bulletPoints = document.querySelectorAll(".dot");
-
 // Fonction pour mettre à jour le carousel
 function updateCarousel() {
   // Mise à jour de l'image et du tagline en fonction de l'index courant
-  imageElement.src = "./assets/images/slideshow/" + slides[currentIndex].image;
+  imageElement.src = `./assets/images/slideshow/${slides[currentIndex].image}`;
   tagLineElement.innerHTML = slides[currentIndex].tagLine;
 
   // Mise à jour des classes des points (dots) en fonction de l'index courant
   dots.forEach((dot, index) => {
-    if (index === currentIndex) {
-      dot.classList.add("dot_selected");
-    } else {
-      dot.classList.remove("dot_selected");
-    }
+    dot.classList.toggle("dot_selected", index === currentIndex);
   });
 }
 
-// Gestionnaire d'événement pour la flèche droite
-arrowRight.addEventListener("click", () => {
-  currentIndex = (currentIndex + 1) % slides.length;
-  // Appel de la fonction pour mettre à jour le carousel
-  updateCarousel();
-});
-
-// Gestionnaire d'événement pour la flèche gauche
-arrowLeft.addEventListener("click", () => {
-  currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-  // Appel de la fonction pour mettre à jour le carousel
-  updateCarousel();
-});
-
 // Appel initial de la fonction pour afficher la première diapositive
 updateCarousel();
+
+
+
 
 // ajout de ma part pour que les points dots soient cliquables
 
